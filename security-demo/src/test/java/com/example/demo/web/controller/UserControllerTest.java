@@ -8,10 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author : zhuqiang
@@ -37,9 +40,9 @@ public class UserControllerTest {
     // 查询成功的测试用例
     @Test
     public void whenQuerySuccess() throws Exception {
-        mockMvc
+        String contentAsString = mockMvc
                 // 发起请求
-                .perform(MockMvcRequestBuilders.get("/user")
+                .perform(get("/user")
                         .param("username", "mrcode")
                         .param("age", "1")
                         .param("ageTo", "3")
@@ -49,9 +52,35 @@ public class UserControllerTest {
                 )
                 // 期望的结果
                 // 这里期望返回的http状态码为200
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 // 从返回的结果中（json）获取长度，期望长度为3
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$.length()").value(3))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
+    }
+
+    // 获取用户详情成功测试用例
+    @Test
+    public void whenGetInfoSuccess() throws Exception {
+        String contentAsString = mockMvc.perform(get("/user/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("mrcode"))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
+    }
+
+    // 获取用户详情，传递id不为数字，失败测试
+    @Test
+    public void whenGetInfoFail() throws Exception {
+        mockMvc.perform(get("/user/a")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
+                // 打印请求响应详细日志，可以在控制台看到详细的日志信息
+                .andDo(MockMvcResultHandlers.print())
+                // 返回结果为 404
+                .andExpect(status().isOk())
         ;
     }
 }
