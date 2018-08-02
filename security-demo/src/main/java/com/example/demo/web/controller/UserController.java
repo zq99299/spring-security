@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -55,5 +56,23 @@ public class UserController {
         System.out.println(ReflectionToStringBuilder.toString(user, ToStringStyle.MULTI_LINE_STYLE));
         user.setId("1");
         return user;
+    }
+
+    @PutMapping("/{id:\\d+}")
+    public User update(@PathVariable() String id, @Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach(err -> {
+                FieldError fieldError = (FieldError) err;
+                System.out.println(fieldError.getField() + " : " + err.getDefaultMessage());
+            });
+        }
+        System.out.println(ReflectionToStringBuilder.toString(user, ToStringStyle.MULTI_LINE_STYLE));
+        user.setId(id);
+        return user;
+    }
+
+    @DeleteMapping("/{id:\\d+}")
+    public void delete(@PathVariable String id) {
+        System.out.println("id:" + id);
     }
 }

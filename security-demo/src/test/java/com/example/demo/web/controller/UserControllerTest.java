@@ -12,10 +12,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,4 +104,31 @@ public class UserControllerTest {
                 .andReturn().getResponse().getContentAsString();
         System.out.println(contentAsString);
     }
+
+    @Test
+    public void whenUpdateSuccess() throws Exception {
+        // jdk8的时间处理类；使用LocalDateTime必须传递时区
+        // 给定一个一年后的时间
+//        long birthday = LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toEpochSecond();
+        // 注意这里的api不要传错了。是毫秒不是秒
+        long birthday = LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        String content = "{\"username\":\"mrcode\",\"password\":null,\"birthday\":" + birthday + "}";
+        String contentAsString = mockMvc.perform(put("/user/1")
+                                                         .contentType(APPLICATION_JSON_UTF8)
+                                                         .content(content)
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
+    }
+
+    @Test
+    public void whenDeleteSuccess() throws Exception {
+        mockMvc.perform(delete("/user/1")
+                                .contentType(APPLICATION_JSON_UTF8)
+        )
+                .andExpect(status().isOk());
+    }
+
 }
