@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 查询条件对象
  * @author : zhuqiang
@@ -7,6 +9,7 @@ package com.example.demo.dto;
  * @date : 2018/8/1 23:19
  */
 public class UserQueryCondition {
+    @ApiModelProperty(value = "用户名")
     private String username;
     private int age;
     private int ageTo;

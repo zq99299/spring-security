@@ -3,6 +3,8 @@ package com.example.demo.web.controller;
 import com.example.demo.dto.User;
 import com.example.demo.dto.UserQueryCondition;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ public class UserController {
 
     @GetMapping
     @JsonView(User.UserSimpleView.class)
+    @ApiOperation(value = "用户查询服务")  // 方法描述
     public List<User> query(UserQueryCondition condition) {
         // compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
         // 一个反射工具类，这里把对象变成一个字符串，支持多种展示形式
@@ -40,7 +43,7 @@ public class UserController {
     // 在路径中使用参数
     @GetMapping("/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
-    public User getInfo(@PathVariable String id) {
+    public User getInfo(@ApiParam(value = "用户id") @PathVariable String id) {
         System.out.println("进入 getInfo 服务");
 //        throw new UserNotExistException(id);
         User user = new User();
