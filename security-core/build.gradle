@@ -1,44 +1,13 @@
-buildscript {
-    ext {
-        springBootVersion = '2.0.3.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
-}
-
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
-sourceCompatibility = 1.8
-
-repositories {
-    maven { url 'https://repo.spring.io/libs-snapshot' }
-    mavenCentral()
-}
-
-
-ext {
-    springCloudVersion = 'Finchley.RELEASE'
-}
-
 dependencies {
+    testCompile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-jdbc')
+    // 在本环境中会引用 5.1.46这个包
+    runtime('mysql:mysql-connector-java')
     // 以及包含了 security 、spring-security-oauth2-autoconfigure 、spring-boot-starter-actuator
-    compile('org.springframework.cloud:spring-cloud-starter-security')
-
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
+    // security 5+ 去掉了可以在配置文件中关闭security的配置，所以这里在视频中配置关闭的时候
+    // 我们在这里注释掉依赖就可以了
+//    compile('org.springframework.cloud:spring-cloud-starter-security')
+    // 工具包
+    compile('org.apache.commons:commons-lang3:3.7')
 }
