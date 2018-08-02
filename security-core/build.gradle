@@ -1,6 +1,7 @@
 dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.springframework.boot:spring-boot-starter-aop")
     compile('org.springframework.boot:spring-boot-starter-jdbc')
     // 在本环境中会引用 5.1.46这个包
     runtime('mysql:mysql-connector-java')
