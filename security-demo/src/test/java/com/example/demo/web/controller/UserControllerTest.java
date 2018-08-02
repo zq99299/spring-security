@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -131,4 +132,22 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void whenFileUploadSuccess() throws Exception {
+        // v5.0+ fileUpLoad方法已经过时了
+        String file = mockMvc.perform(multipart("/file")
+                                              .file(new MockMultipartFile("file", "test.txt", "multipart/form-data", "hello upload".getBytes())))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(file);
+    }
+
+    @Test
+    public void whenFileDownloadSuccess() throws Exception {
+        // v5.0+ fileUpLoad方法已经过时了
+        String file = mockMvc.perform(get("/file/fileUploadTest.txt"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(file);
+    }
 }
