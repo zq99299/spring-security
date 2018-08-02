@@ -5,8 +5,10 @@ import com.example.demo.dto.UserQueryCondition;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +17,11 @@ import java.util.List;
  * @version : V1.0
  * @date : 2018/8/1 23:05
  */
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 public class UserController {
 
-    @GetMapping("")
+    @GetMapping
     @JsonView(User.UserSimpleView.class)
     public List<User> query(UserQueryCondition condition) {
         // compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
@@ -34,11 +37,23 @@ public class UserController {
 
     // 获取用户详情
     // 在路径中使用参数
-    @GetMapping("{id:\\d+}")
+    @GetMapping("/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable String id) {
         User user = new User();
         user.setUsername("mrcode");
+        return user;
+    }
+
+    @PostMapping
+    public User create(@Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach(err -> {
+                System.out.println(err.getDefaultMessage());
+            });
+        }
+        System.out.println(ReflectionToStringBuilder.toString(user, ToStringStyle.MULTI_LINE_STYLE));
+        user.setId("1");
         return user;
     }
 }
