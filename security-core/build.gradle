@@ -8,7 +8,7 @@ dependencies {
     // 以及包含了 security 、spring-security-oauth2-autoconfigure 、spring-boot-starter-actuator
     // security 5+ 去掉了可以在配置文件中关闭security的配置，所以这里在视频中配置关闭的时候
     // 我们在这里注释掉依赖就可以了
-//    compile('org.springframework.cloud:spring-cloud-starter-security')
+    compile('org.springframework.cloud:spring-cloud-starter-security')
     // 工具包
     compile('org.apache.commons:commons-lang3:3.7')
 }
