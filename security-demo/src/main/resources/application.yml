@@ -3,15 +3,19 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/imooc-demo?useUnicode=yes&characterEncode=utf-8
     username: root
-    password: 123
+    password: 123456
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   session:
     store-type: none
-
 imooc:
   security:
     browser:
 #      loginPage: /demo-signIn.html
-      loginType: REDIRECT
+#      loginType: REDIRECT
+      loginType: JSON
+
+logging:
+  level:
+    root: debug

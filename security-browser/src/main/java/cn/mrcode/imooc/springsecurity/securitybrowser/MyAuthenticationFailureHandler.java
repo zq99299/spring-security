@@ -32,13 +32,19 @@ public class MyAuthenticationFailureHandler extends SimpleUrlAuthenticationFailu
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        logger.info("登录成功");
+        logger.info("登录失败");
         if (securityProperties.getBrowser().getLoginType() == LoginType.JSON) {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.getWriter().write(objectMapper.writeValueAsString(exception));
         } else {
-            super.onAuthenticationFailure(request, response, exception);
+            // 在这里失败跳转不回去了。而且异常信息也没有打印出来。父类默认打印了死的一句话
+            // 在这里就不往上面扔了,这里就先当做 defaultFailureUrl 不存在吧
+            // 模拟打印异常信息
+            response.setContentType("text/html;charset=UTF-8");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(),
+                    exception.getLocalizedMessage());
+//            super.onAuthenticationFailure(request, response, exception);
         }
     }
 }
