@@ -3,6 +3,7 @@ buildscript {
         springBootVersion = '2.0.3.RELEASE'
     }
     repositories {
+        maven { url 'https://repo.spring.io/libs-snapshot' }
         mavenCentral()
     }
     dependencies {
@@ -10,11 +11,16 @@ buildscript {
     }
 }
 
-apply plugin: 'idea'
 
 allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'io.spring.dependency-management'
+
     group = 'cn.mrcode.imooc.springsecurity'
     version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = 1.8
 }
 
 
@@ -31,16 +37,16 @@ subprojects {
         }
     }
 
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'eclipse'
     apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
 
-    sourceCompatibility = 1.8
 
     repositories {
+        // 增加n多数据源，加快下载速度
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
         maven { url 'https://repo.spring.io/libs-snapshot' }
+        maven { url "https://maven.repository.redhat.com/ga/" }
+        maven { url "http://maven.nuiton.org/nexus/content/groups/releases/" }
+        maven { url "https://repository.cloudera.com/artifactory/cloudera-repos/" }
         mavenCentral()
     }
 
@@ -54,6 +60,11 @@ subprojects {
     }
 
     dependencyManagement {
+        // 这个可能是一个补充还是第三方的依赖版本管理，在配置core的时候会用到这个配置
+        imports {
+            mavenBom 'io.spring.platform:platform-bom:Cairo-SR3'
+        }
+        // 管理spring大部分配置的依赖版本
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
         }

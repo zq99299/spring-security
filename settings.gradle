@@ -1,5 +1,5 @@
 rootProject.name = 'spring-security'
-//include 'security-app'
+include 'security-app'
 include 'security-browser'
 include 'security-core'
 include 'security-demo'

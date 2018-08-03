@@ -1,14 +1,32 @@
 dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile("org.springframework.boot:spring-boot-starter-aop")
-    compile('org.springframework.boot:spring-boot-starter-jdbc')
-    // 在本环境中会引用 5.1.46这个包
-    runtime('mysql:mysql-connector-java')
+    // security自动配置
     // 以及包含了 security 、spring-security-oauth2-autoconfigure 、spring-boot-starter-actuator
+    // 包含了  spring-boot-starter-web
     // security 5+ 去掉了可以在配置文件中关闭security的配置，所以这里在视频中配置关闭的时候
     // 我们在这里注释掉依赖就可以了
     compile('org.springframework.cloud:spring-cloud-starter-security')
-    // 工具包
-    compile('org.apache.commons:commons-lang3:3.7')
+    // redis自动配置
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
+    // jdbc数据库数据库
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    // 在本环境中会引用 5.1.46这个包
+    runtime('mysql:mysql-connector-java')
+
+    // 切面依赖
+    compile("org.springframework.boot:spring-boot-starter-aop")
+
+    // ~commons工具包==========================
+    compile('org.apache.commons:commons-lang3')
+    // 打开idea 右侧的gradle面板可以看到默认依赖了collections 3.2.2
+    // 在maven仓库页面看到依赖可以升级为collections4:4.2
+    compile('commons-beanutils:commons-beanutils')
+    compile('commons-io:commons-io')
+    // 这个配置没有版本号被之前引入的spring的依赖插件管理，所以需要自己手动增加
+    compile('org.apache.commons:commons-collections4:4.2')
+
+    // ~ org.springframework.social 第三方登录qq登录，微信登录等==========================
+    compile('org.springframework.social:spring-social-config')
+    compile('org.springframework.social:spring-social-security')
+    compile('org.springframework.social:spring-social-web')
 }

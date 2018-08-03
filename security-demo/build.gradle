@@ -1,16 +1,14 @@
 dependencies {
-    compile project(':security-core')
+    compile project(':security-browser')
     // 扫描程序生成文档数据
     // http://springfox.github.io/springfox/docs/current/
     // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile "io.springfox:springfox-swagger2:2.9.2"
     // 提供可视化界面
     // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compile "io.springfox:springfox-swagger-ui:2.9.2"
 
     // wiremock rest服务伪造
 //    testCompile "com.github.tomakehurst:wiremock:2.18.0"
     compile "com.github.tomakehurst:wiremock:2.18.0"
-    // https://mvnrepository.com/artifact/commons-io/commons-io
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
 }
