@@ -1,8 +1,11 @@
 package cn.mrcode.imooc.springsecurity.securitybrowser;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author : zhuqiang
@@ -13,6 +16,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 // WebSecurityConfigurerAdapter 适配器类。专门用来做web应用的安全配置
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     // 有三个configure的方法，这里使用http参数的
     @Override
