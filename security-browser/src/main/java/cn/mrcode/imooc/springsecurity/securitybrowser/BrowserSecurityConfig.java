@@ -26,6 +26,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    @Autowired
+    private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
+
     // 有三个configure的方法，这里使用http参数的
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -37,6 +42,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/authentication/require")
                 .loginProcessingUrl("/authentication/form")
+                .successHandler(myAuthenticationSuccessHandler)
+                .failureHandler(myAuthenticationFailureHandler)
 //                .httpBasic()
                 .and()
                 // 对请求授权配置：注意方法名的含义，能联想到一些

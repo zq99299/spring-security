@@ -10,7 +10,7 @@ package cn.mrcode.imooc.springsecurity.securitycore.properties;
 public class BrowserProperties {
     /** 登录页面路径 */
     private String loginPage = "/imocc-signIn.html";
-
+    private LoginType loginType = LoginType.JSON;
 
     public String getLoginPage() {
         return loginPage;
@@ -18,5 +18,13 @@ public class BrowserProperties {
 
     public void setLoginPage(String loginPage) {
         this.loginPage = loginPage;
+    }
+
+    public LoginType getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(LoginType loginType) {
+        this.loginType = loginType;
     }
 }
