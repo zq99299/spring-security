@@ -12,6 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
                 "cn.mrcode.imooc.springsecurity.securitybrowser",
                 "cn.mrcode.imooc.springsecurity.securitycore"
         })
+//@SpringBootApplication
 @RestController
 @EnableSwagger2
 public class DemoApplication {
