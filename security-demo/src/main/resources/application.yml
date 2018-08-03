@@ -9,3 +9,8 @@ spring:
     time-zone: GMT+8
   session:
     store-type: none
+
+imooc:
+  security:
+    browser:
+      loginPage: /demo-signIn.html

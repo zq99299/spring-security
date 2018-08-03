@@ -1,5 +1,7 @@
 package cn.mrcode.imooc.springsecurity.securitybrowser;
 
+import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 // WebSecurityConfigurerAdapter 适配器类。专门用来做web应用的安全配置
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private SecurityProperties securityProperties;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -30,12 +35,20 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // 定义表单登录 - 身份认证的方式
                 .formLogin()
+                .loginPage("/authentication/require")
+                .loginProcessingUrl("/authentication/form")
 //                .httpBasic()
                 .and()
                 // 对请求授权配置：注意方法名的含义，能联想到一些
                 .authorizeRequests()
+                // 放行这个路径
+                .antMatchers("/authentication/require",
+                             securityProperties.getBrowser().getLoginPage()).permitAll()
                 .anyRequest()
                 // 对任意请求都必须是已认证才能访问
-                .authenticated();
+                .authenticated()
+                .and()
+                .csrf().disable()
+        ;
     }
 }
