@@ -11,6 +11,7 @@ public class BrowserProperties {
     /** 登录页面路径 */
     private String loginPage = "/imocc-signIn.html";
     private LoginType loginType = LoginType.JSON;
+    private int rememberMeSeconds = 60; // 记住我功能默认超时时间60秒
 
     public String getLoginPage() {
         return loginPage;
@@ -26,5 +27,13 @@ public class BrowserProperties {
 
     public void setLoginType(LoginType loginType) {
         this.loginType = loginType;
+    }
+
+    public int getRememberMeSeconds() {
+        return rememberMeSeconds;
+    }
+
+    public void setRememberMeSeconds(int rememberMeSeconds) {
+        this.rememberMeSeconds = rememberMeSeconds;
     }
 }

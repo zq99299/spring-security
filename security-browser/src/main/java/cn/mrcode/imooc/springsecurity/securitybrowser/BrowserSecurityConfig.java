@@ -7,9 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * @author : zhuqiang
@@ -33,6 +38,27 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
 
+    // 数据源是需要在使用处配置数据源的信息
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
+    // 之前已经写好的 MyUserDetailsService
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        // org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer.tokenRepository
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        // 该对象里面有定义创建表的语句
+        // 可以设置让该类来创建表
+        // 但是该功能只用使用一次，如果数据库已经存在表则会报错
+//        jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
+    }
+
     // 有三个configure的方法，这里使用http参数的
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -53,6 +79,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/authentication/form")
                 .successHandler(myAuthenticationSuccessHandler)
                 .failureHandler(myAuthenticationFailureHandler)
+                .and()
+                .rememberMe()
+                .tokenRepository(persistentTokenRepository)
+                .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
+                .userDetailsService(userDetailsService)
 //                .httpBasic()
                 .and()
                 // 对请求授权配置：注意方法名的含义，能联想到一些
@@ -60,8 +91,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 放行这个路径
                 .antMatchers("/authentication/require",
                              securityProperties.getBrowser().getLoginPage(),
-                             "/code/image",  // 图形验证码接口
-                             "/error"  // 图形验证码接口
+                             // 图形验证码接口
+                             "/code/image",
+                             // spring 自带的错误处理
+                             "/error"
                 )
                 .permitAll()
                 .anyRequest()
