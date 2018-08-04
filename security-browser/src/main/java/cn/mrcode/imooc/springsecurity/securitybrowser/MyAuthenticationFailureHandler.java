@@ -36,15 +36,20 @@ public class MyAuthenticationFailureHandler extends SimpleUrlAuthenticationFailu
         if (securityProperties.getBrowser().getLoginType() == LoginType.JSON) {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.getWriter().write(objectMapper.writeValueAsString(exception));
+            logger.error("登录失败:", exception);
+            response.getWriter().write(objectMapper.writeValueAsString(exception.getLocalizedMessage()));
         } else {
             // 在这里失败跳转不回去了。而且异常信息也没有打印出来。父类默认打印了死的一句话
             // 在这里就不往上面扔了,这里就先当做 defaultFailureUrl 不存在吧
             // 模拟打印异常信息
-            response.setContentType("text/html;charset=UTF-8");
-            response.sendError(HttpStatus.UNAUTHORIZED.value(),
-                    exception.getLocalizedMessage());
-//            super.onAuthenticationFailure(request, response, exception);
+//            response.setContentType("text/html;charset=UTF-8");
+//            response.sendError(HttpStatus.UNAUTHORIZED.value(),
+//                    exception.getLocalizedMessage());
+
+            // 源来是这个配置的问题。在视频中看到 在更改上面json分支的异常
+            // 只打印异常信息，不中的视频中上面时候把类型给更换了
+            // 害的我一直怀疑是版本不同，处理逻辑不同了
+            super.onAuthenticationFailure(request, response, exception);
         }
     }
 }

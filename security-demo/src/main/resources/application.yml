@@ -15,7 +15,12 @@ imooc:
 #      loginPage: /demo-signIn.html
 #      loginType: REDIRECT
       loginType: JSON
+    code:
+      image:
+        width: 100
+        height: 50
+        url: /order,/user/*
 
 logging:
   level:
-    root: debug
+    root: info

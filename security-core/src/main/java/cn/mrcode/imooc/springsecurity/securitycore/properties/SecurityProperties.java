@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SecurityProperties {
     /** imooc.security.browser 路径下的配置会被映射到该配置类中 */
     private BrowserProperties browser = new BrowserProperties();
+    private ValidateCodeProperties code = new ValidateCodeProperties();
 
     public BrowserProperties getBrowser() {
         return browser;
@@ -20,5 +21,13 @@ public class SecurityProperties {
 
     public void setBrowser(BrowserProperties browser) {
         this.browser = browser;
+    }
+
+    public ValidateCodeProperties getCode() {
+        return code;
+    }
+
+    public void setCode(ValidateCodeProperties code) {
+        this.code = code;
     }
 }

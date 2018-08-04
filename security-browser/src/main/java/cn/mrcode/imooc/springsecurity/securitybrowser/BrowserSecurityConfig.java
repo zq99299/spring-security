@@ -42,6 +42,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setFailureHandler(myAuthenticationFailureHandler);
+        validateCodeFilter.setSecurityProperties(securityProperties);
+        validateCodeFilter.afterPropertiesSet();
         http
                 // 由源码得知，在最前面的是UsernamePasswordAuthenticationFilter
                 .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
@@ -57,9 +59,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 放行这个路径
                 .antMatchers("/authentication/require",
-                        securityProperties.getBrowser().getLoginPage(),
-                        "/code/image",  // 图形验证码接口
-                        "/error"  // 图形验证码接口
+                             securityProperties.getBrowser().getLoginPage(),
+                             "/code/image",  // 图形验证码接口
+                             "/error"  // 图形验证码接口
                 )
                 .permitAll()
                 .anyRequest()
