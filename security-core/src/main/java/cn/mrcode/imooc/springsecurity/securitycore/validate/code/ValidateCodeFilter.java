@@ -1,6 +1,7 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.image.ImageCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -78,9 +79,10 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     }
 
     private void validate(HttpServletRequest request) throws ServletRequestBindingException {
+        String SESSION_KEY = "SESSION_KEY_FOR_CODE_IMAGE";
         // 拿到之前存储的imageCode信息
         ServletWebRequest swr = new ServletWebRequest(request);
-        ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(swr, ValidateCodeController.SESSION_KEY);
+        ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(swr, SESSION_KEY);
         // 又是一个spring中的工具类，
         // 试问一下，如果不看源码怎么可能知道有这些工具类可用？
         String codeInRequest = ServletRequestUtils.getStringParameter(request, "imageCode");
@@ -92,13 +94,13 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
             throw new ValidateCodeException("验证码不存在");
         }
         if (codeInSession.isExpried()) {
-            sessionStrategy.removeAttribute(swr, ValidateCodeController.SESSION_KEY);
+            sessionStrategy.removeAttribute(swr, SESSION_KEY);
             throw new ValidateCodeException("验证码已过期");
         }
         if (!StringUtils.equals(codeInSession.getCode(), codeInRequest)) {
             throw new ValidateCodeException("验证码不匹配");
         }
-        sessionStrategy.removeAttribute(swr, ValidateCodeController.SESSION_KEY);
+        sessionStrategy.removeAttribute(swr, SESSION_KEY);
     }
 
     public AuthenticationFailureHandler getFailureHandler() {

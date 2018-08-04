@@ -1,7 +1,6 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * <pre>
@@ -13,5 +12,11 @@ import java.io.IOException;
  * @since 1.0.0
  */
 public interface ValidateCodeGenerate {
-    ImageCode generate(HttpServletRequest request) throws IOException;
+    /**
+     * 创建验证码
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    ValidateCode generate(HttpServletRequest request) throws Exception;
 }

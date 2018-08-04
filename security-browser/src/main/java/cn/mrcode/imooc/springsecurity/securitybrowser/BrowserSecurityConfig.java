@@ -92,7 +92,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authentication/require",
                              securityProperties.getBrowser().getLoginPage(),
                              // 图形验证码接口
-                             "/code/image",
+                             "/code/*",
                              // spring 自带的错误处理
                              "/error"
                 )

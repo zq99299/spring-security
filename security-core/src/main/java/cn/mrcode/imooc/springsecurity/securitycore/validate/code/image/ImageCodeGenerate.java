@@ -1,6 +1,7 @@
-package cn.mrcode.imooc.springsecurity.securitycore.validate.code;
+package cn.mrcode.imooc.springsecurity.securitycore.validate.code.image;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.ImageCodeProperties;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.web.bind.ServletRequestUtils;

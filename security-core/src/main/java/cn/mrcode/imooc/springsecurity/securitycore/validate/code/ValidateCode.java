@@ -1,46 +1,35 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code;
 
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 /**
- * 图形验证码
- * @author : zhuqiang
- * @version : V1.0
- * @date : 2018/8/3 22:44
+ * 短信验证码
+ * @author zhuqiang
+ * @version 1.0.1 2018/8/4 14:36
+ * @date 2018/8/4 14:36
+ * @since 1.0
  */
-public class ImageCode {
-    private BufferedImage image;
-    private String code;
-    private LocalDateTime expireTime; // 过期时间
+public class ValidateCode {
+    protected String code;
+    /** 过期时间 */
+    protected LocalDateTime expireTime;
 
     /**
-     * @param image
      * @param code
      * @param expireIn 过期时间，单位秒
      */
-    public ImageCode(BufferedImage image, String code, int expireIn) {
-        this.image = image;
+    public ValidateCode(String code, int expireIn) {
         this.code = code;
         this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
     }
 
-    public ImageCode(BufferedImage image, String code, LocalDateTime expireTime) {
-        this.image = image;
+    public ValidateCode(String code, LocalDateTime expireTime) {
         this.code = code;
         this.expireTime = expireTime;
     }
 
     public boolean isExpried() {
         return this.expireTime.isBefore(LocalDateTime.now());
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
     }
 
     public String getCode() {

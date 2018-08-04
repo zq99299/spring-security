@@ -1,6 +1,6 @@
 package com.example.demo.code;
 
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ImageCode;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.image.ImageCode;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerate;
 
 import javax.servlet.http.HttpServletRequest;
