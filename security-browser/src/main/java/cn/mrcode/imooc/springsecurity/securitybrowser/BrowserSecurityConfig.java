@@ -1,6 +1,8 @@
 package cn.mrcode.imooc.springsecurity.securitybrowser;
 
+import cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.SmsCodeFilter;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +49,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // 由下面的  .apply(smsCodeAuthenticationSecurityConfigs)方法添加这个配置
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfigs;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         // org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer.tokenRepository
@@ -70,9 +76,18 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         validateCodeFilter.setFailureHandler(myAuthenticationFailureHandler);
         validateCodeFilter.setSecurityProperties(securityProperties);
         validateCodeFilter.afterPropertiesSet();
+
+        // 短信的是copy图形的过滤器，这里直接copy初始化
+        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+        smsCodeFilter.setFailureHandler(myAuthenticationFailureHandler);
+        smsCodeFilter.setSecurityProperties(securityProperties);
+        smsCodeFilter.afterPropertiesSet();
         http
                 // 由源码得知，在最前面的是UsernamePasswordAuthenticationFilter
                 .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                // 在这里不能注册到我们自己的短信认证过滤器上，会报错
+                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
+
                 // 定义表单登录 - 身份认证的方式
                 .formLogin()
                 .loginPage("/authentication/require")
@@ -90,11 +105,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 放行这个路径
                 .antMatchers("/authentication/require",
-                             securityProperties.getBrowser().getLoginPage(),
-                             // 图形验证码接口
-                             "/code/*",
-                             // spring 自带的错误处理
-                             "/error"
+                        securityProperties.getBrowser().getLoginPage(),
+                        // 图形验证码接口
+                        "/code/*",
+                        // spring 自带的错误处理
+                        "/error"
                 )
                 .permitAll()
                 .anyRequest()
@@ -102,6 +117,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .csrf().disable()
+                // 这里应用短信认证配置
+                .apply(smsCodeAuthenticationSecurityConfigs)
         ;
     }
 }

@@ -1,7 +1,6 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.image.ImageCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -29,7 +28,7 @@ import java.util.stream.Stream;
  * @version : V1.0
  * @date : 2018/8/3 23:24
  */
-public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
+public class SmsCodeFilter extends OncePerRequestFilter implements InitializingBean {
     // 在初始化本类的地方进行注入
     // 一般在配置security http的地方进行添加过滤器
     private AuthenticationFailureHandler failureHandler;
@@ -53,7 +52,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         String url = securityProperties.getCode().getImage().getUrl();
         String[] configUrl = StringUtils.split(url, ",");
         urls = Stream.of(configUrl).collect(Collectors.toSet());
-        urls.add("/authentication/form"); // 登录请求
+        urls.add("/authentication/sms"); // 登录请求
     }
 
     @Override
@@ -79,13 +78,13 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     }
 
     private void validate(HttpServletRequest request) throws ServletRequestBindingException {
-        String SESSION_KEY = ValidateCodeProcessor.SESSION_KEY_PREFIX + "_IMAGE";
+        String SESSION_KEY = ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS";
         // 拿到之前存储的imageCode信息
         ServletWebRequest swr = new ServletWebRequest(request);
-        ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(swr, SESSION_KEY);
+        ValidateCode codeInSession = (ValidateCode) sessionStrategy.getAttribute(swr, SESSION_KEY);
         // 又是一个spring中的工具类，
         // 试问一下，如果不看源码怎么可能知道有这些工具类可用？
-        String codeInRequest = ServletRequestUtils.getStringParameter(request, "imageCode");
+        String codeInRequest = ServletRequestUtils.getStringParameter(request, "smsCode");
 
         if (StringUtils.isBlank(codeInRequest)) {
             throw new ValidateCodeException("验证码的值不能为空");
