@@ -13,7 +13,10 @@ public interface SecurityConstants {
      * @see cn.mrcode.imooc.springsecurity.securitybrowser.BrowserSecurityController
      */
     String DEFAULT_UNAUTHENTICATION_URL = "/authentication/require";
-    /** 默认的用户名密码登录请求处理url */
+    /** 默认的用户名密码登录请求处理url ： 框架拦截认证url，
+     * 登录的时候提交地址写这个，只是框架内部使用，配置方不需要存储在该地址
+     * 还是根据security过滤器链原理决定了，拦截指定的url，完成特定服务的功能
+     * */
     String DEFAULT_LOGIN_PROCESSING_URL_FORM = "/authentication/form";
     /** 默认的手机验证码登录请求处理url */
     String DEFAULT_LOGIN_PROCESSING_URL_MOBILE = "/authentication/mobile";
