@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2018/8/4 11:28
  * @since 1.0.0
  */
-public interface ValidateCodeGenerate {
+
+public interface ValidateCodeGenerator {
     /**
      * 创建验证码
      * @param request

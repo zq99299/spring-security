@@ -1,6 +1,7 @@
 package cn.mrcode.imooc.springsecurity.securitybrowser;
 
 import cn.mrcode.imooc.springsecurity.securitybrowser.support.SimpleResponse;
+import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * ${desc}
+ * 当需要身份认证的时候跳转到该类，进行分发处理
  * @author zhuqiang
  * @version 1.0.1 2018/8/3 14:58
  * @date 2018/8/3 14:58
@@ -45,9 +46,10 @@ public class BrowserSecurityController {
      * @param response
      * @return
      */
-    @RequestMapping("/authentication/require")
+    @RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public SimpleResponse requirAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         if (savedRequest != null) {
             String targetUrl = savedRequest.getRedirectUrl();

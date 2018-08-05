@@ -1,6 +1,6 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code.sms;
 
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.AbstractValidateCodeProcessor;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.impl.AbstractValidateCodeProcessor;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 /**
  * 短信验证处理器
  */
-@Component("smsCodeProcessor")
-public class SmsCodeProcessor extends AbstractValidateCodeProcessor {
+@Component
+public class SmsValidateCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode> {
     @Autowired
     private SmsCodeSender smsCodeSender;
 

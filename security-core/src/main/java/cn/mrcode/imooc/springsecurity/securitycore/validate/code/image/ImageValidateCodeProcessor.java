@@ -1,7 +1,6 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code.image;
 
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.AbstractValidateCodeProcessor;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCode;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.impl.AbstractValidateCodeProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -11,11 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 图像处理
  */
-@Component("imageCodeProcessor")
-public class ImageCodeProcessor extends AbstractValidateCodeProcessor {
+@Component
+public class ImageValidateCodeProcessor extends AbstractValidateCodeProcessor<ImageCode> {
     @Override
-    public void send(ServletWebRequest request, ValidateCode validateCode) throws Exception {
-        ImageCode imageCode = (ImageCode) validateCode;
+    public void send(ServletWebRequest request, ImageCode imageCode) throws Exception {
         HttpServletResponse response = request.getResponse();
         response.setContentType("image/jpeg");
         //禁止图像缓存。

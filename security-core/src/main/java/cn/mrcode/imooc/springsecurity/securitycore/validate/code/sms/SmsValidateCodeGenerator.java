@@ -2,7 +2,7 @@ package cn.mrcode.imooc.springsecurity.securitycore.validate.code.sms;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SmsCodeProperties;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCode;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerate;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2018/8/4 11:30
  * @since 1.0
  */
-public class SmsCodeGenerate implements ValidateCodeGenerate {
+public class SmsValidateCodeGenerator implements ValidateCodeGenerator {
     private SmsCodeProperties smsCodeProperties;
 
-    public SmsCodeGenerate(SmsCodeProperties smsCodeProperties) {
+    public SmsValidateCodeGenerator(SmsCodeProperties smsCodeProperties) {
         this.smsCodeProperties = smsCodeProperties;
     }
 

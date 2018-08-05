@@ -1,9 +1,9 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.image.ImageCodeGenerate;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.image.ImageValidateCodeGenerator;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.sms.DefaultSmsCodeSender;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.sms.SmsCodeGenerate;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.sms.SmsValidateCodeGenerator;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,9 +25,9 @@ public class ValidateCodeConfig {
     // spring 容器中如果存在imageCodeGenerate的bean就不会再初始化该bean了
     // 条件注解
     @Bean
-    @ConditionalOnMissingBean(name = "imageCodeGenerate")
-    public ValidateCodeGenerate imageCodeGenerate() {
-        ImageCodeGenerate imageCodeGenerate = new ImageCodeGenerate(securityProperties.getCode().getImage());
+    @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
+    public ValidateCodeGenerator imageValidateCodeGenerator() {
+        ImageValidateCodeGenerator imageCodeGenerate = new ImageValidateCodeGenerator(securityProperties.getCode().getImage());
         return imageCodeGenerate;
     }
 
@@ -36,11 +36,12 @@ public class ValidateCodeConfig {
     // 在注入的时候也需要用其他手段与该name相同的id注入才可以
     // 当然还有其他的方式。可能可以使用：不同的子接口来分离短信和图形接口
     // 比如 @Qualifier("imageCodeGenerate") 或则什么的参数名和这个相同
-    @Bean
-    @ConditionalOnMissingBean(name = "smsCodeGenerate")
-    public ValidateCodeGenerate smsCodeGenerate() {
-        SmsCodeGenerate smsCodeGenerate = new SmsCodeGenerate(securityProperties.getCode().getSms());
-        return smsCodeGenerate;
+    @Bean("smsValidateCodeGenerator")
+    @ConditionalOnMissingBean(name = "smsValidateCodeGenerator")
+    // 注意方法名称：如果没有指定bean则按方法名称作为beanName返回
+    public ValidateCodeGenerator smsCodeGenerate() {
+        SmsValidateCodeGenerator smsValidateCodeGenerator = new SmsValidateCodeGenerator(securityProperties.getCode().getSms());
+        return smsValidateCodeGenerator;
     }
 
     @Bean

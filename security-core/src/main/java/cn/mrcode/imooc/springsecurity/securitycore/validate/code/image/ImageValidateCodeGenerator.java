@@ -1,7 +1,7 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code.image;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.ImageCodeProperties;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerate;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -21,10 +21,10 @@ import java.util.Random;
  * @date 2018/8/4 11:30
  * @since 1.0
  */
-public class ImageCodeGenerate implements ValidateCodeGenerate {
+public class ImageValidateCodeGenerator implements ValidateCodeGenerator {
     private ImageCodeProperties imageProperties;
 
-    public ImageCodeGenerate(ImageCodeProperties imageProperties) {
+    public ImageValidateCodeGenerator(ImageCodeProperties imageProperties) {
         this.imageProperties = imageProperties;
     }
 

@@ -1,14 +1,15 @@
 package cn.mrcode.imooc.springsecurity.securitybrowser;
 
+import cn.mrcode.imooc.springsecurity.securitycore.authentication.AbstractChannelSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.SmsCodeFilter;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeFilter;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,7 @@ import javax.sql.DataSource;
 
 // WebSecurityConfigurerAdapter 适配器类。专门用来做web应用的安全配置
 @Configuration
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SecurityProperties securityProperties;
 
@@ -34,11 +35,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Autowired
-    private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
-    @Autowired
-    private MyAuthenticationFailureHandler myAuthenticationFailureHandler;
 
     // 数据源是需要在使用处配置数据源的信息
     @Autowired
@@ -52,6 +48,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     // 由下面的  .apply(smsCodeAuthenticationSecurityConfigs)方法添加这个配置
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfigs;
+
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
@@ -72,43 +71,27 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         // 在v5+中，该配置（表单登录）应该是默认配置了
         // basic登录（也就是弹框登录的）应该是v5-的版本默认
 
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setFailureHandler(myAuthenticationFailureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
-
-        // 短信的是copy图形的过滤器，这里直接copy初始化
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        smsCodeFilter.setFailureHandler(myAuthenticationFailureHandler);
-        smsCodeFilter.setSecurityProperties(securityProperties);
-        smsCodeFilter.afterPropertiesSet();
+        applyPasswordAuthenticationConfig(http);
         http
-                // 由源码得知，在最前面的是UsernamePasswordAuthenticationFilter
-                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                // 在这里不能注册到我们自己的短信认证过滤器上，会报错
-                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
-
-                // 定义表单登录 - 身份认证的方式
-                .formLogin()
-                .loginPage("/authentication/require")
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(myAuthenticationSuccessHandler)
-                .failureHandler(myAuthenticationFailureHandler)
+                .apply(validateCodeSecurityConfig)
+                .and()
+                .apply(smsCodeAuthenticationSecurityConfigs)
                 .and()
                 .rememberMe()
                 .tokenRepository(persistentTokenRepository)
                 .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
                 .userDetailsService(userDetailsService)
-//                .httpBasic()
                 .and()
                 // 对请求授权配置：注意方法名的含义，能联想到一些
                 .authorizeRequests()
                 // 放行这个路径
-                .antMatchers("/authentication/require",
+                .antMatchers(
+                        SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
                         securityProperties.getBrowser().getLoginPage(),
-                        // 图形验证码接口
-                        "/code/*",
-                        // spring 自带的错误处理
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*", // 图形验证码接口
+                        // org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
+                        // BasicErrorController 类提供的默认错误信息处理服务
                         "/error"
                 )
                 .permitAll()
@@ -116,9 +99,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对任意请求都必须是已认证才能访问
                 .authenticated()
                 .and()
-                .csrf().disable()
-                // 这里应用短信认证配置
-                .apply(smsCodeAuthenticationSecurityConfigs)
+                .csrf()
+                .disable()
         ;
     }
 }

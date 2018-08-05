@@ -9,7 +9,7 @@ package cn.mrcode.imooc.springsecurity.securitycore.properties;
  */
 public class BrowserProperties {
     /** 登录页面路径 */
-    private String loginPage = "/imocc-signIn.html";
+    private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
     private LoginType loginType = LoginType.JSON;
     private int rememberMeSeconds = 60; // 记住我功能默认超时时间60秒
 

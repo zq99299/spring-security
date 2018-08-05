@@ -1,5 +1,6 @@
 package cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile;
 
+import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -20,9 +21,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
     // ~ Static fields/initializers
     // =====================================================================================
 
-    public static final String SPRING_SECURITY_FORM_MOBILE_KEY = "mobile";
-
-    private String mobileParameter = SPRING_SECURITY_FORM_MOBILE_KEY;
+    private String mobileParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
     private boolean postOnly = true;
 
     // ~ Constructors
@@ -30,7 +29,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 
     public SmsCodeAuthenticationFilter() {
         // 拦截该路径，如果是访问该路径，则标识是需要短信登录
-        super(new AntPathRequestMatcher("/authentication/sms", "POST"));
+        super(new AntPathRequestMatcher(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE, "POST"));
     }
 
     // ~ Methods

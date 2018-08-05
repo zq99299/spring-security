@@ -17,4 +17,6 @@ public interface ValidateCodeProcessor {
      * @param request
      */
     void create(ServletWebRequest request) throws Exception;
+
+    void validate(ServletWebRequest request);
 }

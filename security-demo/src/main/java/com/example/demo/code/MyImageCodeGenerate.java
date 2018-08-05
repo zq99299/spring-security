@@ -1,7 +1,7 @@
 package com.example.demo.code;
 
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.image.ImageCode;
-import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerate;
+import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeGenerator;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.io.IOException;
  * @since 1.0
  */
 //@Component/*("imageCodeGenerate")*/
-public class MyImageCodeGenerate implements ValidateCodeGenerate {
+public class MyImageCodeGenerate implements ValidateCodeGenerator {
     @Override
     public ImageCode generate(HttpServletRequest request) throws IOException {
         System.out.println("自定义验证码生成");
