@@ -4,7 +4,6 @@ import cn.mrcode.imooc.springsecurity.securitycore.qq.api.QQ;
 import cn.mrcode.imooc.springsecurity.securitycore.qq.api.QQImpl;
 import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
 import org.springframework.social.oauth2.OAuth2ServiceProvider;
-import org.springframework.social.oauth2.OAuth2Template;
 
 /**
  * 服务提供商:
@@ -25,7 +24,7 @@ public class QQServiceProvider extends AbstractOAuth2ServiceProvider<QQ> {
     public QQServiceProvider(String appId, String secret) {
         // OAuth2Operations 有一个默认实现类，可以使用这个默认实现类
         // oauth2的一个流程服务
-        super(new OAuth2Template(appId, secret, authorizeUrl, accessTokenUrl));
+        super(new QQAuth2Template(appId, secret, authorizeUrl, accessTokenUrl));
         this.appId = appId;
     }
 

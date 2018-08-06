@@ -41,6 +41,7 @@ public class QQUserInfo {
      * 用户在QQ空间的昵称。
      */
     private String nickname;
+    private String constellation;
     /**
      * 大小为30×30像素的QQ空间头像URL。
      */
@@ -236,5 +237,13 @@ public class QQUserInfo {
 
     public void setIs_yellow_year_vip(String is_yellow_year_vip) {
         this.is_yellow_year_vip = is_yellow_year_vip;
+    }
+
+    public String getConstellation() {
+        return constellation;
+    }
+
+    public void setConstellation(String constellation) {
+        this.constellation = constellation;
     }
 }
