@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8080
   servlet:
     session:
       timeout: 300s
@@ -13,7 +13,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   session:
-    store-type: none
+    store-type: redis
 imooc:
   security:
     browser:

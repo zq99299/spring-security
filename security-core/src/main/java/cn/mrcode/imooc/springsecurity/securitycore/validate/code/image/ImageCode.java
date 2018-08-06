@@ -3,6 +3,7 @@ package cn.mrcode.imooc.springsecurity.securitycore.validate.code.image;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCode;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
  * @version : V1.0
  * @date : 2018/8/3 22:44
  */
-public class ImageCode extends ValidateCode {
+public class ImageCode extends ValidateCode implements Serializable{
+    private static final long serialVersionUID = -703011095085705839L;
     private BufferedImage image;
 
     public ImageCode(BufferedImage image, String code, int expireIn) {

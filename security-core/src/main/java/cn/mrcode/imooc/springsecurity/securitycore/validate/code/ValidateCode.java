@@ -1,5 +1,6 @@
 package cn.mrcode.imooc.springsecurity.securitycore.validate.code;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -9,7 +10,8 @@ import java.time.LocalDateTime;
  * @date 2018/8/4 14:36
  * @since 1.0
  */
-public class ValidateCode {
+public class ValidateCode implements Serializable {
+    private static final long serialVersionUID = 5927976362845150980L;
     protected String code;
     /** 过期时间 */
     protected LocalDateTime expireTime;
