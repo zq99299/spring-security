@@ -1,4 +1,4 @@
-package cn.mrcode.imooc.springsecurity.securitybrowser;
+package com.example.demo.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
- * ${desc}
+ * 个性化的存储，应该在使用方控制
  * @author zhuqiang
  * @version 1.0.1 2018/8/3 9:16
  * @date 2018/8/3 9:16

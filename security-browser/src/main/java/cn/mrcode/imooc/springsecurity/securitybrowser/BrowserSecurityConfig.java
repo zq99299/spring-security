@@ -4,7 +4,7 @@ import cn.mrcode.imooc.springsecurity.securitycore.authentication.AbstractChanne
 import cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
-import cn.mrcode.imooc.springsecurity.securitycore.qq.SocialConfig;
+import cn.mrcode.imooc.springsecurity.securitycore.social.SocialConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -97,6 +97,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*", // 图形验证码接口
+                        securityProperties.getBrowser().getSignUpUrl(),  // 注册页面
+                        "/user/regist", // 注册请求，后面会介绍怎么把这个只有使用方知道放行的配置剥离处理
                         // org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
                         // BasicErrorController 类提供的默认错误信息处理服务
                         "/error",

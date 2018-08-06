@@ -10,6 +10,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactory;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
 
 /**
  * autoconfigure2.04中已经不存在social的自动配置类了
@@ -34,5 +36,11 @@ public class QQAutoConfig extends SocialConfigurerAdapter {
     public ConnectionFactory<?> createConnectionFactory() {
         QQProperties qq = securityProperties.getSocial().getQq();
         return new QQOAuth2ConnectionFactory(qq.getProviderId(), qq.getAppId(), qq.getAppSecret());
+    }
+
+    // 这里需要返回null，否则会返回内存的 ConnectionRepository
+    @Override
+    public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
+        return null;
     }
 }
