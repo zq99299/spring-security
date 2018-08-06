@@ -4,6 +4,7 @@ import cn.mrcode.imooc.springsecurity.securitycore.authentication.AbstractChanne
 import cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
+import cn.mrcode.imooc.springsecurity.securitycore.qq.SocialConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
@@ -49,6 +51,11 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     @Autowired
     private ValidateCodeSecurityConfig validateCodeSecurityConfig;
+    /**
+     * @see SocialConfig#imoocSocialSecurityConfig()
+     */
+    @Autowired
+    private SpringSocialConfigurer imoocSocialSecurityConfig;
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
@@ -75,6 +82,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .and()
                 .apply(smsCodeAuthenticationSecurityConfigs)
                 .and()
+                .apply(imoocSocialSecurityConfig)
+                .and()
                 .rememberMe()
                 .tokenRepository(persistentTokenRepository)
                 .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
@@ -90,7 +99,11 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*", // 图形验证码接口
                         // org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
                         // BasicErrorController 类提供的默认错误信息处理服务
-                        "/error"
+                        "/error",
+                        "/connect/*",
+                        "/auth/*",
+                        "/signin"
+
                 )
                 .permitAll()
                 .anyRequest()

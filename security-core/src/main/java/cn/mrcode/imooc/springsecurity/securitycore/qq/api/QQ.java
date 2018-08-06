@@ -1,7 +1,5 @@
 package cn.mrcode.imooc.springsecurity.securitycore.qq.api;
 
-import java.io.IOException;
-
 /**
  * qq
  * @author : zhuqiang
@@ -9,5 +7,5 @@ import java.io.IOException;
  * @date : 2018/8/6 0:44
  */
 public interface QQ {
-    QQUserInfo getUserInfo() throws IOException;
+    QQUserInfo getUserInfo();
 }

@@ -26,6 +26,7 @@ public class QQServiceProvider extends AbstractOAuth2ServiceProvider<QQ> {
         // OAuth2Operations 有一个默认实现类，可以使用这个默认实现类
         // oauth2的一个流程服务
         super(new OAuth2Template(appId, secret, authorizeUrl, accessTokenUrl));
+        this.appId = appId;
     }
 
     @Override

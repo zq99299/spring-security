@@ -4,11 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Component;
 // 自定义数据源来获取数据
 // 这里只要是存在一个自定义的 UserDetailsService ，那么security将会使用该实例进行配置
 @Component
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService, SocialUserDetailsService {
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -35,13 +37,24 @@ public class MyUserDetailsService implements UserDetailsService {
         // 写死一个密码，赋予一个admin权限
 //        User admin = new User(username, "{noop}123456",
 //                              AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        return getUserDetails(username);
+    }
+
+
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+        logger.info("登录用户名:{}", userId);
+        return getUserDetails(userId);
+    }
+
+    private SocialUser getUserDetails(String username) {
         String password = passwordEncoder.encode("123456");
         logger.info("数据库密码{}", password);
-        User admin = new User(username,
+        SocialUser admin = new SocialUser(username,
 //                              "{noop}123456",
-                              password,
-                              true, true, true, true,
-                              AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+                password,
+                true, true, true, true,
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
         return admin;
     }
 }
