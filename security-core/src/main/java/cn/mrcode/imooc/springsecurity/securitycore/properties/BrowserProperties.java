@@ -14,6 +14,8 @@ public class BrowserProperties {
     private int rememberMeSeconds = 60; // 记住我功能默认超时时间60秒
     /** 注册页面 */
     private String signUpUrl = "/imooc-signUp.html";
+    /** 退出成页面 */
+    private String signOutUrl;
 
     private SessionProperties session = new SessionProperties();
 
@@ -55,5 +57,13 @@ public class BrowserProperties {
 
     public void setSession(SessionProperties session) {
         this.session = session;
+    }
+
+    public String getSignOutUrl() {
+        return signOutUrl;
+    }
+
+    public void setSignOutUrl(String signOutUrl) {
+        this.signOutUrl = signOutUrl;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.session.InvalidSessionStrategy;
@@ -71,6 +72,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
 
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         // org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer.tokenRepository
@@ -106,14 +110,17 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .and()
                 .sessionManagement()
                 .invalidSessionStrategy(invalidSessionStrategy)
-                .maximumSessions(securityProperties.getBrowser().getSession().getMaximumSessions())
-                .maxSessionsPreventsLogin(securityProperties.getBrowser().getSession().isMaxSessionsPreventsLogin())
-                .expiredSessionStrategy(sessionInformationExpiredStrategy)
-//                .invalidSessionStrategy(invalidSessionStrategy)
-//                .maximumSessions(session.getMaximumSessions()) //限制同一个用户只能有一个session登录
-//                .maxSessionsPreventsLogin(session.isMaxSessionsPreventsLogin())  // 当session达到最大后，阻止后登录的行为
-//                .expiredSessionStrategy(sessionInformationExpiredStrategy)  // 失效后的策略。定制型更高，失效前的请求还能拿到
+                .maximumSessions(session.getMaximumSessions()) //限制同一个用户只能有一个session登录
+                .maxSessionsPreventsLogin(session.isMaxSessionsPreventsLogin())  // 当session达到最大后，阻止后登录的行为
+                .expiredSessionStrategy(sessionInformationExpiredStrategy)  // 失效后的策略。定制型更高，失效前的请求还能拿到
                 .and()
+                .and()
+                .logout()
+//                .logoutUrl("/singout")  // 退出请求路径
+                // 与logoutSuccessUrl互斥，有handler则logoutSuccessUrl失效
+                // 通过处理器增加配置了页面则跳转到页面，没有则输出json
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .deleteCookies("JSESSIONID")
                 .and()
                 // 对请求授权配置：注意方法名的含义，能联想到一些
                 .authorizeRequests()

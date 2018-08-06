@@ -1,4 +1,4 @@
-package cn.mrcode.imooc.springsecurity.securitybrowser;
+package cn.mrcode.imooc.springsecurity.securitybrowser.authentication;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.LoginType;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
