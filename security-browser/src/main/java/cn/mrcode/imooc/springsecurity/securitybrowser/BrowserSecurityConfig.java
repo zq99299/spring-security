@@ -4,6 +4,7 @@ import cn.mrcode.imooc.springsecurity.securitycore.authentication.AbstractChanne
 import cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
+import cn.mrcode.imooc.springsecurity.securitycore.properties.SessionProperties;
 import cn.mrcode.imooc.springsecurity.securitycore.social.SocialConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
@@ -57,6 +60,17 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SpringSocialConfigurer imoocSocialSecurityConfig;
 
+    /**
+     * @see BrowserSecurityBeanConfig
+     */
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
+    /**
+     * @see BrowserSecurityBeanConfig
+     */
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         // org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer.tokenRepository
@@ -77,6 +91,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
         // basic登录（也就是弹框登录的）应该是v5-的版本默认
 
         applyPasswordAuthenticationConfig(http);
+        SessionProperties session = securityProperties.getBrowser().getSession();
         http
                 .apply(validateCodeSecurityConfig)
                 .and()
@@ -89,6 +104,17 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
                 .userDetailsService(userDetailsService)
                 .and()
+                .sessionManagement()
+                .invalidSessionStrategy(invalidSessionStrategy)
+                .maximumSessions(securityProperties.getBrowser().getSession().getMaximumSessions())
+                .maxSessionsPreventsLogin(securityProperties.getBrowser().getSession().isMaxSessionsPreventsLogin())
+                .expiredSessionStrategy(sessionInformationExpiredStrategy)
+//                .invalidSessionStrategy(invalidSessionStrategy)
+//                .maximumSessions(session.getMaximumSessions()) //限制同一个用户只能有一个session登录
+//                .maxSessionsPreventsLogin(session.isMaxSessionsPreventsLogin())  // 当session达到最大后，阻止后登录的行为
+//                .expiredSessionStrategy(sessionInformationExpiredStrategy)  // 失效后的策略。定制型更高，失效前的请求还能拿到
+                .and()
+                .and()
                 // 对请求授权配置：注意方法名的含义，能联想到一些
                 .authorizeRequests()
                 // 放行这个路径
@@ -98,6 +124,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*", // 图形验证码接口
                         securityProperties.getBrowser().getSignUpUrl(),  // 注册页面
+                        securityProperties.getBrowser().getSession().getSessionInvalidUrl() + ".json",
+                        securityProperties.getBrowser().getSession().getSessionInvalidUrl() + ".html",
                         "/user/regist", // 注册请求，后面会介绍怎么把这个只有使用方知道放行的配置剥离处理
                         // org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
                         // BasicErrorController 类提供的默认错误信息处理服务
@@ -105,7 +133,6 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         "/connect/*",
                         "/auth/*",
                         "/signin"
-
                 )
                 .permitAll()
                 .anyRequest()

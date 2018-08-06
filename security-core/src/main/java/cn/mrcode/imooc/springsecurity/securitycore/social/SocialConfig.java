@@ -16,6 +16,7 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.security.SpringSocialConfigurer;
@@ -63,12 +64,13 @@ public class SocialConfig extends SocialConfigurerAdapter {
 
     //https://docs.spring.io/spring-social/docs/1.1.x-SNAPSHOT/reference/htmlsingle/#creating-connections-with-connectcontroller
     // 必须要添加一个处理器
-//    @Bean
-//    public ConnectController connectController(
-//            ConnectionFactoryLocator connectionFactoryLocator,
-//            ConnectionRepository connectionRepository) {
-//        return new ConnectController(connectionFactoryLocator, connectionRepository);
-//    }
+    // 后补：这个是提供查询社交账户信息服务，绑定服务，等
+    @Bean
+    public ConnectController connectController(
+            ConnectionFactoryLocator connectionFactoryLocator,
+            ConnectionRepository connectionRepository) {
+        return new ConnectController(connectionFactoryLocator, connectionRepository);
+    }
     @Bean
     public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator,
                                                    UsersConnectionRepository usersConnectionRepository) {
