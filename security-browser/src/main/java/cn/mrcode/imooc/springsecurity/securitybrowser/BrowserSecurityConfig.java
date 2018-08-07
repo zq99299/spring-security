@@ -35,11 +35,6 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SecurityProperties securityProperties;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     // 数据源是需要在使用处配置数据源的信息
     @Autowired
     private DataSource dataSource;

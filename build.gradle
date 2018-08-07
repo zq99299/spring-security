@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.3.RELEASE'
+        springBootVersion = '2.0.4.RELEASE'
     }
     repositories {
         maven { url 'https://repo.spring.io/libs-snapshot' }
@@ -27,7 +27,7 @@ allprojects {
 subprojects {
     buildscript {
         ext {
-            springBootVersion = '2.0.3.RELEASE'
+            springBootVersion = '2.0.4.RELEASE'
         }
         repositories {
             mavenCentral()
@@ -52,7 +52,7 @@ subprojects {
 
 
     ext {
-        springCloudVersion = 'Finchley.RELEASE'
+        springCloudVersion = 'Finchley.SR1'
     }
 
     dependencies {

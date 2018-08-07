@@ -52,9 +52,9 @@ public class MyUserDetailsService implements UserDetailsService, SocialUserDetai
         logger.info("数据库密码{}", password);
         SocialUser admin = new SocialUser(username,
 //                              "{noop}123456",
-                password,
-                true, true, true, true,
-                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+                                          password,
+                                          true, true, true, true,
+                                          AuthorityUtils.commaSeparatedStringToAuthorityList(""));
         return admin;
     }
 }

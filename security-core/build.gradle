@@ -1,11 +1,12 @@
 dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     // security自动配置
-    // 以及包含了 security 、spring-security-oauth2-autoconfigure 、spring-boot-starter-actuator
-    // 包含了  spring-boot-starter-web
+    // 以及包含了 spring-cloud-start,spring-cloud-security 、spring-boot-starter-actuator
     // security 5+ 去掉了可以在配置文件中关闭security的配置，所以这里在视频中配置关闭的时候
     // 我们在这里注释掉依赖就可以了
-    compile('org.springframework.cloud:spring-cloud-starter-security')
+//    compile('org.springframework.cloud:spring-cloud-starter-security')
+    // 多包涵了一个spring-security-oauth2-autoconfigure
+    compile('org.springframework.cloud:spring-cloud-starter-oauth2')
     // redis自动配置
     compile('org.springframework.boot:spring-boot-starter-data-redis')
     // jdbc数据库数据库
