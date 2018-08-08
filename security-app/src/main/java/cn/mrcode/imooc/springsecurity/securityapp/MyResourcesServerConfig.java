@@ -60,9 +60,8 @@ public class MyResourcesServerConfig extends ResourceServerConfigurerAdapter {
                 .failureHandler(myAuthenticationFailureHandler)
         ;
         http
-                // 视频中说验证码的功能还有一点问题，先不用
-//                .apply(validateCodeSecurityConfig)
-//                .and()
+                .apply(validateCodeSecurityConfig)
+                .and()
                 .apply(smsCodeAuthenticationSecurityConfigs)
                 .and()
                 .apply(imoocSocialSecurityConfig)
