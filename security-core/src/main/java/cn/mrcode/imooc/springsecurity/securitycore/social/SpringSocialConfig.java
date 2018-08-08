@@ -4,6 +4,7 @@
 package cn.mrcode.imooc.springsecurity.securitycore.social;
 
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableSocial
-public class SocialConfig extends SocialConfigurerAdapter {
+public class SpringSocialConfig extends SocialConfigurerAdapter {
     @Autowired
     private SecurityProperties securityProperties;
     @Autowired
@@ -39,6 +40,9 @@ public class SocialConfig extends SocialConfigurerAdapter {
      */
     @Autowired(required = false)
     private ConnectionSignUp connectionSignUp;
+
+    @Autowired(required = false)
+    private SocialAuthenticationFilterPostProcessor socialAuthenticationFilterPostProcessor;
 
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
@@ -57,8 +61,9 @@ public class SocialConfig extends SocialConfigurerAdapter {
     public SpringSocialConfigurer imoocSocialSecurityConfig() {
         // 默认配置类，进行组件的组装
         // 包括了过滤器SocialAuthenticationFilter 添加到security过滤链中
-        SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
+        MySpringSocialConfigurer springSocialConfigurer = new MySpringSocialConfigurer();
         springSocialConfigurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
+        springSocialConfigurer.setSocialAuthenticationFilterPostProcessor(socialAuthenticationFilterPostProcessor);
         return springSocialConfigurer;
     }
 
@@ -71,6 +76,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
             ConnectionRepository connectionRepository) {
         return new ConnectController(connectionFactoryLocator, connectionRepository);
     }
+
     @Bean
     public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator,
                                                    UsersConnectionRepository usersConnectionRepository) {

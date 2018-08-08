@@ -4,7 +4,7 @@ import cn.mrcode.imooc.springsecurity.securitybrowser.support.SimpleResponse;
 import cn.mrcode.imooc.springsecurity.securitybrowser.support.SocialUserInfo;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
-import cn.mrcode.imooc.springsecurity.securitycore.social.SocialConfig;
+import cn.mrcode.imooc.springsecurity.securitycore.social.SpringSocialConfig;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class BrowserSecurityController {
     private SecurityProperties securityProperties;
 
     /**
-     * see {@link SocialConfig#providerSignInUtils(org.springframework.social.connect.ConnectionFactoryLocator, org.springframework.social.connect.UsersConnectionRepository)}
+     * see {@link SpringSocialConfig#providerSignInUtils(org.springframework.social.connect.ConnectionFactoryLocator, org.springframework.social.connect.UsersConnectionRepository)}
      */
     @Autowired
     private ProviderSignInUtils providerSignInUtils;

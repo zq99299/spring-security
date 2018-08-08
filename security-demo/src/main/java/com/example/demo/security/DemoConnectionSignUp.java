@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import cn.mrcode.imooc.springsecurity.securitycore.social.SocialConfig;
+import cn.mrcode.imooc.springsecurity.securitycore.social.SpringSocialConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author : zhuqiang
  * @version : V1.0
  * @date : 2018/8/6 20:04
- * @see SocialConfig#connectionSignUp  该对象存在则会在该地方被使用
+ * @see SpringSocialConfig#connectionSignUp  该对象存在则会在该地方被使用
  */
 @Component
 public class DemoConnectionSignUp implements ConnectionSignUp {
