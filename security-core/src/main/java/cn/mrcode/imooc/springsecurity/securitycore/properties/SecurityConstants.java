@@ -38,5 +38,10 @@ public interface SecurityConstants {
     /** session失效时跳转的地址 */
     String DEFAULT_SESSION_INVALID_URL = "/imocc-session-invalid";
 
-
+    /** openId登录拦截地址 */
+    String DEFAULT_LOGIN_PROCESSING_URL_OPEN_ID = "/authentication/openid";
+    /** openId字段名 */
+    String DEFAULT_PARAMETER_NAME_OPEN_ID = "openId";
+    /** providerId参数名 */
+    String DEFAULT_PARAMETER_NAME_PROVIDERID = "providerId";
 }

@@ -9,6 +9,7 @@ package cn.mrcode.imooc.springsecurity.securityapp;
  * @since 1.0
  * */
 
+import cn.mrcode.imooc.springsecurity.securityapp.social.openid.OpenIdAuthenticationSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
@@ -45,6 +46,8 @@ public class MyResourcesServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler myAuthenticationFailureHandler;
 
+    @Autowired
+    private OpenIdAuthenticationSecurityConfig openIdAuthenticationSecurityConfig;
 
     // 有三个configure的方法，这里使用http参数的
     @Override
@@ -66,12 +69,15 @@ public class MyResourcesServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 .apply(imoocSocialSecurityConfig)
                 .and()
+                .apply(openIdAuthenticationSecurityConfig)
+                .and()
                 // 对请求授权配置：注意方法名的含义，能联想到一些
                 .authorizeRequests()
                 // 放行这个路径
                 .antMatchers(
                         SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_OPEN_ID,
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*", // 图形验证码接口
                         securityProperties.getBrowser().getSignUpUrl(),  // 注册页面

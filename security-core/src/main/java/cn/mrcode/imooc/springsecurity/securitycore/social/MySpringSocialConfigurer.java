@@ -16,6 +16,7 @@ public class MySpringSocialConfigurer extends SpringSocialConfigurer {
         // 这样的方法可以更改拦截的前缀
         SocialAuthenticationFilter filter = (SocialAuthenticationFilter) super.postProcess(object);
         filter.setFilterProcessesUrl("/oaths");
+//        filter.setAuthenticationSuccessHandler();
         return (T) filter;
     }
 }

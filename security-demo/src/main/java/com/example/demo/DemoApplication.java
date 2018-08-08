@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication(scanBasePackages =
         {
                 "com.example.demo",
-//                "cn.mrcode.imooc.springsecurity.securitybrowser",
+                "cn.mrcode.imooc.springsecurity.securitybrowser",
                 "cn.mrcode.imooc.springsecurity.securityapp",
                 "cn.mrcode.imooc.springsecurity.securitycore"
         })
