@@ -81,6 +81,7 @@ public class MyResourcesServerConfig extends ResourceServerConfigurerAdapter {
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*", // 图形验证码接口
                         securityProperties.getBrowser().getSignUpUrl(),  // 注册页面
+                        "/social/signUp",  // app注册跳转服务
                         "/user/regist",
                         "/error",
                         "/connect/*",

@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
-import org.springframework.stereotype.Component;
 
 /**
  * 第三方登录，默认注册用户
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @date : 2018/8/6 20:04
  * @see SpringSocialConfig#connectionSignUp  该对象存在则会在该地方被使用
  */
-@Component
+//@Component
 public class DemoConnectionSignUp implements ConnectionSignUp {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
