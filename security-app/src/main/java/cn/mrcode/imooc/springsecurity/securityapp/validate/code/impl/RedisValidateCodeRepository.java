@@ -1,5 +1,6 @@
 package cn.mrcode.imooc.springsecurity.securityapp.validate.code.impl;
 
+import cn.mrcode.imooc.springsecurity.securityapp.AppConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCode;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeException;
 import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeRepository;
@@ -56,7 +57,7 @@ public class RedisValidateCodeRepository implements ValidateCodeRepository {
      * @return
      */
     private String buildKey(ServletWebRequest request, ValidateCodeType validateCodeType) {
-        String deviceId = request.getHeader("deviceId");
+        String deviceId = request.getHeader(AppConstants.DEFAULT_HEADER_DEVICE_ID);
         if (StringUtils.isBlank(deviceId)) {
             throw new ValidateCodeException("请在请求头中携带deviceId参数");
         }

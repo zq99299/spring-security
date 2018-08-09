@@ -1,5 +1,6 @@
 package com.example.demo.web.controller;
 
+import cn.mrcode.imooc.springsecurity.securityapp.social.AppSignUpUtils;
 import com.example.demo.dto.User;
 import com.example.demo.dto.UserQueryCondition;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -12,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +31,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+//    @Autowired
+//    private ProviderSignInUtils providerSignInUtils;
     @Autowired
-    private ProviderSignInUtils providerSignInUtils;
+    private AppSignUpUtils appSignUpUtils;
 
     @GetMapping
     @JsonView(User.UserSimpleView.class)
@@ -102,6 +104,6 @@ public class UserController {
 
         //不管是注册用户还是绑定用户，都会拿到一个用户唯一标识。
         String userId = user.getUsername();
-        providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+        appSignUpUtils.doPostSignUp(userId, new ServletWebRequest(request));
     }
 }

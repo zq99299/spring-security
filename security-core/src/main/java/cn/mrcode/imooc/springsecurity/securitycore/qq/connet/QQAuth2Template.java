@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.social.SocialException;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Template;
 import org.springframework.util.MultiValueMap;
@@ -43,6 +44,10 @@ public class QQAuth2Template extends OAuth2Template {
         // 调用本方法之前传递过来的参数，也就是 exchangeForAccess() 方法
         // 其中有一个 useParametersForClientAuthentication 属性需要为true才会携带另外另个参数
         logger.info("获取accessToken响应:{}", responseStr);
+        String errorDescription = StringUtils.substringBetween(responseStr, "\"error_description\":\"", "\"}");
+        if (StringUtils.isNotBlank(errorDescription)) {
+            throw new SocialException(errorDescription){};
+        }
         String[] items = StringUtils.splitByWholeSeparatorPreserveAllTokens(responseStr, "&");
         String accessToken = StringUtils.substringAfterLast(items[0], "=");
         String expiresIn = StringUtils.substringAfterLast(items[1], "=");
