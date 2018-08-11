@@ -12,4 +12,8 @@ dependencies {
     // wiremock rest服务伪造
 //    testCompile "com.github.tomakehurst:wiremock:2.18.0"
     compile "com.github.tomakehurst:wiremock:2.18.0"
+
+
+    // ~ jwt==========================
+    compile 'io.jsonwebtoken:jjwt:0.9.1'
 }

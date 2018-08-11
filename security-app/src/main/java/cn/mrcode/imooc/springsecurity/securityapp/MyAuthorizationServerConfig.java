@@ -15,9 +15,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * ${desc}
@@ -37,6 +43,15 @@ public class MyAuthorizationServerConfig extends AuthorizationServerConfigurerAd
 
     @Autowired(required = false)
     public TokenStore tokenStore;
+
+    @Autowired(required = false)
+    // 只有当使用jwt的时候才会有该对象
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    /**
+     * @see TokenStoreConfig
+     */
+    @Autowired(required = false)
+    private TokenEnhancer jwtTokenEnhancer;
 
     public MyAuthorizationServerConfig(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -62,6 +77,21 @@ public class MyAuthorizationServerConfig extends AuthorizationServerConfigurerAd
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(this.authenticationManager);
         endpoints.tokenStore(tokenStore);
+        /**
+         * 私有方法，但是在里面调用了accessTokenEnhancer.enhance所以这里使用链
+         * @see DefaultTokenServices#createAccessToken(org.springframework.security.oauth2.provider.OAuth2Authentication, org.springframework.security.oauth2.common.OAuth2RefreshToken)
+         */
+        if (jwtAccessTokenConverter != null && jwtTokenEnhancer != null) {
+            TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+            List<TokenEnhancer> enhancers = new ArrayList<>();
+            enhancers.add(jwtTokenEnhancer);
+            enhancers.add(jwtAccessTokenConverter);
+            enhancerChain.setTokenEnhancers(enhancers);
+            // 一个处理链，先添加，再转换
+            endpoints
+                    .tokenEnhancer(enhancerChain)
+                    .accessTokenConverter(jwtAccessTokenConverter);
+        }
     }
 
     @Override
