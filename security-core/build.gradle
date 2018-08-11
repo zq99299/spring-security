@@ -9,6 +9,12 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-oauth2')
     // redis自动配置
     compile('org.springframework.boot:spring-boot-starter-data-redis')
+    // jedis 切换
+//    compile('org.springframework.boot:spring-boot-starter-data-redis'){
+//        exclude group: 'io.lettuce', module: 'lettuce-core'
+//    }
+//    compile 'redis.clients:jedis'
+
     // jdbc数据库数据库
     compile('org.springframework.boot:spring-boot-starter-jdbc')
     // 在本环境中会引用 5.1.46这个包

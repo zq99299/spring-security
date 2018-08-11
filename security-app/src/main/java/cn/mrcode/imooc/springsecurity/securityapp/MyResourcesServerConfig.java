@@ -86,7 +86,12 @@ public class MyResourcesServerConfig extends ResourceServerConfigurerAdapter {
                         "/error",
                         "/connect/*",
                         "/auth/*",
-                        "/signin"
+                        "/signin",
+                        "/swagger-ui.html",
+                        "/swagger-ui.html/**",
+                        "/webjars/**",
+                        "/swagger-resources/**",
+                        "/v2/**"
                 )
                 .permitAll()
                 .anyRequest()

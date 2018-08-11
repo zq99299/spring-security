@@ -30,11 +30,33 @@ imooc:
       qq:
         app-id: 101316278
         app-secret: 34211e019a56566f7d44f4fe58380e69
+    oauth2:
+      clients:
+        -
+          clientId: myid
+          clientSecret: myid
+          redirectUris:
+            - "http://example.com"
+            - "http://ora.com"
+          accessTokenValiditySeconds: 0
+        -
+          clientId: myid2
+          clientSecret: myid2
+          authorizedGrantTypes: ["refresh_token", "password"]
+          redirectUris:
+            - "http://example.com"
+            - "localhost:8080"
+          scopes: ["all", "read", "write"]
+          accessTokenValiditySeconds: 7200
 
 logging:
   level:
     root: info
+    sun.rmi.transport.tcp: info
+    sun.rmi.loader: info
+    io.lettuce.core.protocol.CommandHandler: info
   path: log
+# 自定义认证服务器配置后下面的配置就没有用了
 security:
   oauth2:
     client:
