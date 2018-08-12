@@ -1,7 +1,7 @@
 package com.example.demo.web.controller;
 
-import cn.mrcode.imooc.springsecurity.securityapp.social.AppSignUpUtils;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
+import cn.mrcode.imooc.springsecurity.securitycore.social.SignUpUtils;
 import com.example.demo.dto.User;
 import com.example.demo.dto.UserQueryCondition;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -41,7 +41,8 @@ public class UserController {
     //    @Autowired
 //    private ProviderSignInUtils providerSignInUtils;
     @Autowired
-    private AppSignUpUtils appSignUpUtils;
+    private SignUpUtils signUpUtils;
+
     @Autowired
     private SecurityProperties securityProperties;
 
@@ -134,6 +135,6 @@ public class UserController {
 
         //不管是注册用户还是绑定用户，都会拿到一个用户唯一标识。
         String userId = user.getUsername();
-        appSignUpUtils.doPostSignUp(userId, new ServletWebRequest(request));
+        signUpUtils.doPostSignUp(userId, new ServletWebRequest(request));
     }
 }

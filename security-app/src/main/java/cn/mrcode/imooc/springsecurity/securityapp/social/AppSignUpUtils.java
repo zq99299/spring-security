@@ -2,6 +2,7 @@ package cn.mrcode.imooc.springsecurity.securityapp.social;
 
 import cn.mrcode.imooc.springsecurity.securityapp.AppConstants;
 import cn.mrcode.imooc.springsecurity.securityapp.AppSecretException;
+import cn.mrcode.imooc.springsecurity.securitycore.social.SignUpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,7 +23,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * @since 1.0
  */
 @Component
-public class AppSignUpUtils {
+public class AppSignUpUtils implements SignUpUtils {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
     // 目前为止都是自动配置的，直接获取即可
@@ -31,6 +32,7 @@ public class AppSignUpUtils {
     @Autowired
     private ConnectionFactoryLocator connectionFactoryLocator;
 
+    @Override
     public void saveConnection(ServletWebRequest request, ConnectionData connectionData) {
         redisTemplate.opsForValue().set(buildKey(request), connectionData);
     }
@@ -40,6 +42,7 @@ public class AppSignUpUtils {
      * @param request
      * @see ProviderSignInAttempt#addConnection(java.lang.String, org.springframework.social.connect.ConnectionFactoryLocator, org.springframework.social.connect.UsersConnectionRepository)
      */
+    @Override
     public void doPostSignUp(String userId, ServletWebRequest request) {
         String key = buildKey(request);
         ConnectionData connectionData = (ConnectionData) redisTemplate.opsForValue().get(key);
