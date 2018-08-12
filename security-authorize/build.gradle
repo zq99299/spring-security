@@ -1,0 +1,5 @@
+dependencies {
+    compile 'javax.servlet:javax.servlet-api'
+    // 核心的类都在该包中
+    compile 'org.springframework.security:spring-security-core'
+}

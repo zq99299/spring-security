@@ -3,6 +3,7 @@ package cn.mrcode.imooc.springsecurity.securitycore.authorize;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
  * @date : 2018/8/12 21:12
  */
 @Component
+@Order(Integer.MIN_VALUE)
 public class CommonAuthorizeConfigProvider implements AuthorizeConfigProvider {
     @Autowired
     private SecurityProperties securityProperties;

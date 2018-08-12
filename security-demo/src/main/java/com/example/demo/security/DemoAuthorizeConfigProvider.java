@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import cn.mrcode.imooc.springsecurity.securitycore.authorize.AuthorizeConfigProvider;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
  * @date : 2018/8/12 21:25
  */
 @Component
+@Order(Integer.MAX_VALUE)
 public class DemoAuthorizeConfigProvider implements AuthorizeConfigProvider {
     @Override
     public void config(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry config) {
@@ -29,8 +31,7 @@ public class DemoAuthorizeConfigProvider implements AuthorizeConfigProvider {
                 "/swagger-resources/**",
                 "/v2/**"
         )
-                .permitAll()
-                .antMatchers("/user/*").hasRole("ADMIN")
-        ;
+                .permitAll();
+        config.anyRequest().access("@rbacService.hasPermission(request,authentication)");
     }
 }

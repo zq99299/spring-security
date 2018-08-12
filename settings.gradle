@@ -7,4 +7,5 @@ include 'sso-client1'
 include 'sso-client2'
 include 'sso-demo'
 include 'sso-server'
+include 'security-authorize'
 
