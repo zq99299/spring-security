@@ -1,6 +1,6 @@
 dependencies {
-//    compile project(':security-browser') // 开发app，先暂时注释掉
-    compile project(':security-app')
+    compile project(':security-browser') // 开发app，先暂时注释掉
+//    compile project(':security-app')
     // 扫描程序生成文档数据
     // http://springfox.github.io/springfox/docs/current/
     // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2

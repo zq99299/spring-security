@@ -10,6 +10,7 @@ import cn.mrcode.imooc.springsecurity.securitycore.validate.code.ValidateCodeSec
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -135,6 +136,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         "/signin"
                 )
                 .permitAll()
+                // 该路径，只允许有 ADMIN 角色的人访问
+                .antMatchers(HttpMethod.GET, "/user/*").hasRole("ADMIN")
                 .anyRequest()
                 // 对任意请求都必须是已认证才能访问
                 .authenticated()
