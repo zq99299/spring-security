@@ -5,6 +5,7 @@ package cn.mrcode.imooc.springsecurity.sso.ssoserver;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -29,13 +30,14 @@ public class SsoAuthorizationServerConfig extends AuthorizationServerConfigurerA
                 .authorizedGrantTypes("authorization_code", "refresh_token")
                 .scopes("all")
                 .redirectUris(
-                        "http://example.com",
-                        "http://ora.com")
+                        "http://localhost:8080/client1/login")
                 .and()
                 .withClient("myid2")
                 .secret("myid2")
                 .authorizedGrantTypes("authorization_code", "refresh_token")
-                .scopes("all");
+                .scopes("all")
+                .redirectUris(
+                        "http://localhost:8060/client2/login");
     }
 
     @Override
@@ -45,6 +47,8 @@ public class SsoAuthorizationServerConfig extends AuthorizationServerConfigurerA
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.passwordEncoder(NoOpPasswordEncoder.getInstance());
+        // 表达式，标识需要授权后才能获取
         security.tokenKeyAccess("isAuthenticated()");
     }
 
