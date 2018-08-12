@@ -2,7 +2,7 @@ package cn.mrcode.imooc.springsecurity.securitybrowser;
 
 import cn.mrcode.imooc.springsecurity.securitycore.authentication.AbstractChannelSecurityConfig;
 import cn.mrcode.imooc.springsecurity.securitycore.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
-import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityConstants;
+import cn.mrcode.imooc.springsecurity.securitycore.authorize.AuthorizeConfigManager;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SecurityProperties;
 import cn.mrcode.imooc.springsecurity.securitycore.properties.SessionProperties;
 import cn.mrcode.imooc.springsecurity.securitycore.social.SpringSocialConfig;
@@ -69,6 +69,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private LogoutSuccessHandler logoutSuccessHandler;
 
+    @Autowired
+    private AuthorizeConfigManager authorizeConfigManager;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         // org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer.tokenRepository
@@ -116,34 +119,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .and()
-                // 对请求授权配置：注意方法名的含义，能联想到一些
-                .authorizeRequests()
-                // 放行这个路径
-                .antMatchers(
-                        SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
-                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-                        securityProperties.getBrowser().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*", // 图形验证码接口
-                        securityProperties.getBrowser().getSignUpUrl(),  // 注册页面
-                        securityProperties.getBrowser().getSession().getSessionInvalidUrl() + ".json",
-                        securityProperties.getBrowser().getSession().getSessionInvalidUrl() + ".html",
-                        "/user/regist", // 注册请求，后面会介绍怎么把这个只有使用方知道放行的配置剥离处理
-                        // org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
-                        // BasicErrorController 类提供的默认错误信息处理服务
-                        "/error",
-                        "/connect/*",
-                        "/auth/*",
-                        "/signin"
-                )
-                .permitAll()
-                // 该路径，只允许有 ADMIN 角色的人访问
-                .antMatchers(HttpMethod.GET, "/user/*").hasRole("ADMIN")
-                .anyRequest()
-                // 对任意请求都必须是已认证才能访问
-                .authenticated()
-                .and()
                 .csrf()
-                .disable()
-        ;
+                .disable();
+        authorizeConfigManager.config(http.authorizeRequests());
     }
 }

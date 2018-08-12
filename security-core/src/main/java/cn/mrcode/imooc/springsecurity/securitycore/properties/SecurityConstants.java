@@ -7,6 +7,7 @@ package cn.mrcode.imooc.springsecurity.securitycore.properties;
  * @date : 2018/8/5 16:08
  */
 public interface SecurityConstants {
+    /** 验证码前缀 */
     String DEFAULT_VALIDATE_CODE_URL_PREFIX = "/code";
     /**
      * 当请求需要身份认证时，默认跳转的url
